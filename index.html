@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080808">
+<title>مدیریار | مدیریت هوشمند گروه</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Vazirmatn',sans-serif;scroll-behavior:smooth}
+:root{--bg:#080808;--card:#111;--gold:#ffc400;--text:#fff;--muted:#aaa;--border:rgba(255,196,0,.2)}
+body{background:var(--bg);color:var(--text);overflow-x:hidden;transition:.3s}
+body.light{--bg:#f5f5f5;--card:#fff;--text:#171717;--muted:#666;--border:rgba(180,130,0,.25)}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer}
+.container{width:90%;max-width:1200px;margin:auto}
+.logo{display:flex;align-items:center;gap:10px;font-size:23px;font-weight:900;color:var(--gold)}
+.brand-mark{width:58px;height:58px;flex-shrink:0;filter:drop-shadow(0 0 12px rgba(255,196,0,.35))}
+header{position:fixed;top:0;right:0;width:100%;z-index:1000;background:rgba(8,8,8,.94);backdrop-filter:blur(15px);border-bottom:1px solid var(--border)}
+body.light header{background:rgba(255,255,255,.94)}
+.navbar{height:85px;display:flex;justify-content:space-between;align-items:center}
+.nav-links{display:flex;align-items:center;gap:28px;list-style:none}
+.nav-links a{font-size:14px;transition:.3s}
+.nav-links a:hover{color:var(--gold)}
+.nav-actions{display:flex;align-items:center;gap:12px}
+.theme-btn{width:42px;height:42px;border-radius:50%;border:1px solid var(--border);background:transparent;color:var(--gold);font-size:19px}
+.menu-btn{display:none;background:none;border:none;color:var(--gold);font-size:28px}
+.btn{display:inline-block;padding:13px 26px;border-radius:10px;font-weight:800;border:none;transition:.3s}
+.btn-primary{background:linear-gradient(135deg,#ffe16a,#ffb700);color:#111;box-shadow:0 5px 25px rgba(255,196,0,.2)}
+.btn-primary:hover{transform:translateY(-4px);box-shadow:0 8px 30px rgba(255,196,0,.35)}
+.btn-outline{border:1px solid var(--gold);color:var(--gold)}
+.btn-outline:hover{background:var(--gold);color:#111}
+.hero{min-height:100vh;display:flex;align-items:center;padding-top:110px;position:relative;overflow:hidden}
+.hero:before{content:"";position:absolute;width:500px;height:500px;background:rgba(255,196,0,.08);filter:blur(120px);border-radius:50%;top:10%;right:-200px}
+.hero-content{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:50px;position:relative}
+.hero-text h1{font-size:clamp(35px,5vw,60px);line-height:1.5;font-weight:900;margin-bottom:20px}
+.hero-text h1 span,.section-title h2 span,.about-text h2 span{color:var(--gold)}
+.hero-text p{color:var(--muted);font-size:17px;line-height:2.2;margin-bottom:30px}
+.hero-image{display:flex;justify-content:center;align-items:center}
+.hero-logo{width:100%;max-width:390px;animation:float 4s ease-in-out infinite;filter:drop-shadow(0 0 40px rgba(255,196,0,.25))}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-18px)}}
+section{padding:90px 0}
+.section-title{text-align:center;margin-bottom:45px}
+.section-title h2{font-size:35px;font-weight:900;margin-bottom:12px}
+.section-title p{color:var(--muted);line-height:2}
+.features,.stats{background:var(--card)}
+.features-intro{text-align:center}
+.lock-entry{display:none;margin:30px auto 0;padding:17px 35px;font-size:18px;border-radius:14px;background:linear-gradient(135deg,#ffe16a,#ffb700);color:#111;font-weight:900;border:none}
+.locks-area{display:none;margin-top:45px}
+.locks-area.show{display:block;animation:appear .4s ease}
+@keyframes appear{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+.locks-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.lock-card{background:var(--bg);border:1px solid var(--border);border-radius:17px;padding:25px 20px;cursor:pointer;transition:.3s;text-align:right}
+.lock-card:hover{transform:translateY(-6px);border-color:var(--gold);box-shadow:0 10px 30px rgba(255,196,0,.09)}
+.lock-card-top{display:flex;align-items:center;gap:13px;margin-bottom:15px}
+.lock-icon{width:55px;height:55px;min-width:55px;display:flex;align-items:center;justify-content:center;font-size:28px;border-radius:15px;background:rgba(255,196,0,.12);border:1px solid var(--border)}
+.lock-card h3{font-size:17px}
+.lock-card p{color:var(--muted);font-size:13px;line-height:2}
+.lock-card .more{display:block;margin-top:14px;color:var(--gold);font-size:13px;font-weight:800}
+.lock-detail{display:none;position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);padding:20px;overflow-y:auto;align-items:center;justify-content:center}
+.lock-detail.show{display:flex}
+.detail-box{background:var(--card);border:1px solid var(--gold);border-radius:20px;width:100%;max-width:650px;max-height:90vh;overflow-y:auto;padding:28px;position:relative;animation:appear .3s ease}
+.detail-close{position:absolute;left:18px;top:15px;width:38px;height:38px;border-radius:50%;border:1px solid var(--border);background:transparent;color:var(--gold);font-size:22px}
+.detail-heading{display:flex;align-items:center;gap:15px;margin-bottom:20px;padding-left:40px}
+.detail-heading h2{font-size:21px;color:var(--gold)}
+.detail-description{white-space:pre-line;color:var(--text);font-size:14px;line-height:2.1}
+.about-content{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.about-text h2{font-size:35px;margin-bottom:25px}
+.about-text p{color:var(--muted);line-height:2.3;margin-bottom:20px}
+.about-box{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:35px;text-align:center}
+.about-box .brand-mark{width:220px;height:220px}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;text-align:center}
+.stat-item{padding:28px 15px;border:1px solid var(--border);border-radius:15px}
+.stat-item h3{font-size:35px;color:var(--gold);margin-bottom:10px}
+.stat-item p{color:var(--muted)}
+.contact-content{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+.contact-info h3{font-size:25px;margin-bottom:20px}
+.contact-info p{color:var(--muted);line-height:2.2;margin-bottom:25px}
+.contact-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:35px;text-align:center}
+.contact-icon{font-size:55px;margin-bottom:15px}
+.contact-card h3{margin-bottom:12px}
+.contact-card p{color:var(--muted);line-height:2;margin-bottom:22px}
+footer{background:#050505;padding:55px 0 25px;border-top:1px solid var(--border)}
+body.light footer{background:#e9e9e9}
+.footer-content{display:grid;grid-template-columns:2fr 1fr 1fr;gap:40px;margin-bottom:35px}
+.footer-about p{color:var(--muted);line-height:2.2;margin-top:15px;max-width:400px}
+.footer-links h3{color:var(--gold);margin-bottom:18px}
+.footer-links ul{list-style:none}
+.footer-links li{margin-bottom:12px;color:var(--muted)}
+.footer-links a:hover{color:var(--gold)}
+.copyright{text-align:center;padding-top:22px;border-top:1px solid var(--border);color:var(--muted);font-size:13px}
+@media(max-width:900px){
+.nav-links{gap:12px}
+.hero-content,.about-content,.contact-content{grid-template-columns:1fr}
+.hero-text{text-align:center}
+.locks-grid{grid-template-columns:repeat(2,1fr)}
+.stats-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:700px){
+.navbar{height:70px}
+.menu-btn{display:block}
+.nav-links{position:absolute;top:70px;right:0;width:100%;background:var(--card);flex-direction:column;padding:25px;gap:22px;display:none;border-bottom:1px solid var(--border)}
+.nav-links.active{display:flex}
+.nav-actions .btn{display:none}
+.locks-grid,.footer-content{grid-template-columns:1fr}
+.section-title h2{font-size:27px}
+.hero{padding-top:120px}
+.hero-logo{max-width:260px}
+.logo{font-size:19px}
+.brand-mark{width:46px;height:46px}
+.detail-box{padding:22px 17px}
+.detail-heading h2{font-size:18px}
+}
+</style>
+</head>
+
+<body>
+
+<svg style="position:absolute;width:0;height:0" aria-hidden="true">
+<symbol id="modiryarLogo" viewBox="0 0 200 200">
+<defs>
+<linearGradient id="goldGradient" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#fff18a"/>
+<stop offset="50%" stop-color="#ffc400"/>
+<stop offset="100%" stop-color="#ff9800"/>
+</linearGradient>
+<linearGradient id="silverGradient" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#fff"/>
+<stop offset="100%" stop-color="#999"/>
+</linearGradient>
+</defs>
+<path d="M100 5 L187 52 L187 145 L100 195 L13 145 L13 52 Z" fill="#090909" stroke="url(#goldGradient)" stroke-width="6"/>
+<path d="M30 65 L45 45 L68 58 L100 25 L132 58 L155 45 L170 65 L155 145 L100 175 L45 145 Z" fill="#111" stroke="#777" stroke-width="4"/>
+<path d="M67 43 L52 25 L73 34 L100 8 L127 34 L148 25 L133 43 L120 54 L100 37 L80 54 Z" fill="url(#goldGradient)" stroke="#ffbd00" stroke-width="2"/>
+<path d="M65 75 L100 57 L135 75 L135 126 L100 151 L65 126 Z" fill="#080808" stroke="url(#goldGradient)" stroke-width="5"/>
+<circle cx="100" cy="86" r="13" fill="url(#silverGradient)"/>
+<circle cx="77" cy="98" r="8" fill="url(#silverGradient)"/>
+<circle cx="123" cy="98" r="8" fill="url(#silverGradient)"/>
+<path d="M69 124 Q72 103 87 108 L100 119 L113 108 Q128 103 131 124 L118 137 L82 137 Z" fill="url(#silverGradient)"/>
+<path d="M36 124 Q100 168 164 103" fill="none" stroke="url(#goldGradient)" stroke-width="9" stroke-linecap="round"/>
+</symbol>
+</svg>
+
+<header>
+<div class="container navbar">
+<a href="#home" class="logo">
+<svg class="brand-mark"><use href="#modiryarLogo"/></svg>
+<span>مدیریار</span>
+</a>
+
+<ul class="nav-links" id="navLinks">
+<li><a href="#home">خانه</a></li>
+<li><a href="#features">امکانات</a></li>
+<li><a href="#about">درباره ما</a></li>
+<li><a href="#stats">آمار</a></li>
+<li><a href="https://ble.ir/Arsamwar314" target="_blank" rel="noopener noreferrer">ارتباط با ما</a></li>
+</ul>
+
+<div class="nav-actions">
+<button class="theme-btn" id="themeBtn">☀</button>
+<a href="https://ble.ir/Arsamwar314" target="_blank" rel="noopener noreferrer" class="btn btn-primary">ارتباط با ما</a>
+<button class="menu-btn" id="menuBtn">☰</button>
+</div>
+</div>
+</header>
+
+<main>
+
+<section class="hero" id="home">
+<div class="container hero-content">
+<div class="hero-text">
+<h1>مدیریت گروه‌ها با <span>مدیریار</span></h1>
+<p>
+با مدیریار، مدیریت گروه‌ها و مجموعه‌های خود را هوشمندتر،
+ساده‌تر و سریع‌تر انجام دهید. همه ابزارهای موردنیاز شما
+در یک محیط حرفه‌ای و یکپارچه.
+</p>
+<div>
+<button class="btn btn-primary" id="showFeatures">مشاهده امکانات</button>
+<a href="https://ble.ir/Arsamwar314" target="_blank" rel="noopener noreferrer" class="btn btn-outline">ارتباط با ما</a>
+</div>
+</div>
+
+<div class="hero-image">
+<svg class="hero-logo" viewBox="0 0 200 200">
+<use href="#modiryarLogo"/>
+</svg>
+</div>
+</div>
+</section>
+
+<section class="features" id="features">
+<div class="container">
+<div class="section-title">
+<h2>امکانات <span>مدیریار</span></h2>
+<p>ابزارهای حرفه‌ای برای مدیریت و کنترل گروه</p>
+</div>
+
+<div class="features-intro">
+<p style="color:var(--muted);line-height:2">
+برای مشاهده امکانات مدیریتی روی دکمه زیر بزنید.
+</p>
+<button class="lock-entry" id="lockEntry">🔒 مدیریت قفل‌ها</button>
+</div>
+
+<div class="locks-area" id="locksArea">
+<div class="section-title">
+<h2>پنل <span>مدیریت قفل‌ها</span></h2>
+<p>برای مشاهده توضیحات و دستورات هر قفل، روی آن بزنید.</p>
+</div>
+<div class="locks-grid" id="locksGrid"></div>
+</div>
+</div>
+</section>
+
+<section id="about">
+<div class="container about-content">
+<div class="about-text">
+<h2>درباره <span>مدیریار</span></h2>
+<p>
+مدیریار با هدف ساده‌تر کردن مدیریت گروه‌ها و مجموعه‌ها
+طراحی شده است. ما تلاش می‌کنیم ابزارهایی کاربردی و
+حرفه‌ای در اختیار مدیران قرار دهیم.
+</p>
+<p>
+هدف ما ایجاد تجربه‌ای سریع، ساده و قابل‌اعتماد برای
+مدیریت بهتر است.
+</p>
+<a href="https://ble.ir/Arsamwar314" target="_blank" rel="noopener noreferrer" class="btn btn-primary">ارتباط با ما</a>
+</div>
+
+<div class="about-box">
+<svg class="brand-mark" viewBox="0 0 200 200">
+<use href="#modiryarLogo"/>
+</svg>
+</div>
+</div>
+</section>
+
+<section class="stats" id="stats">
+<div class="container">
+<div class="section-title">
+<h2>مدیریار در <span>یک نگاه</span></h2>
+<p>نگاهی کوتاه به امکانات و اهداف ما</p>
+</div>
+
+<div class="stats-grid">
+<div class="stat-item"><h3>24/7</h3><p>دسترسی همیشگی</p></div>
+<div class="stat-item"><h3>100%</h3><p>تمرکز بر کیفیت</p></div>
+<div class="stat-item"><h3>سریع</h3><p>عملکرد روان</p></div>
+<div class="stat-item"><h3>هوشمند</h3><p>مدیریت بهتر</p></div>
+</div>
+</div>
+</section>
+
+<section id="contact">
+<div class="container">
+<div class="section-title">
+<h2>ارتباط با <span>ما</span></h2>
+<p>برای ارتباط مستقیم با پشتیبانی مدیریار اقدام کنید.</p>
+</div>
+
+<div class="contact-content">
+<div class="contact-info">
+<h3>ما آماده پاسخ‌گویی هستیم</h3>
+<p>
+برای ارسال پیشنهاد، پرسیدن سؤال یا دریافت راهنمایی،
+از طریق آیدی بله با ما در ارتباط باشید.
+</p>
+</div>
+
+<div class="contact-card">
+<div class="contact-icon">💬</div>
+<h3>پشتیبانی مدیریار در بله</h3>
+<p>
+برای ورود به گفت‌وگوی مستقیم روی دکمه زیر بزنید.
+<br>
+آیدی: @Arsamwar314
+</p>
+<a href="https://ble.ir/Arsamwar314" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+ورود به پیوی بله
+</a>
+</div>
+</div>
+</div>
+</section>
+
+</main>
+
+<footer>
+<div class="container">
+<div class="footer-content">
+
+<div class="footer-about">
+<a href="#home" class="logo">
+<svg class="brand-mark"><use href="#modiryarLogo"/></svg>
+<span>مدیریار</span>
+</a>
+<p>
+مدیریار، همراه شما برای مدیریت هوشمندتر،
+سریع‌تر و ساده‌تر گروه‌ها.
+</p>
+</div>
+
+<div class="footer-links">
+<h3>دسترسی سریع</h3>
+<ul>
+<li><a href="#home">خانه</a></li>
+<li><a href="#features">امکانات</a></li>
+<li><a href="#about">درباره ما</a></li>
+<li><a href="#stats">آمار</a></li>
+</ul>
+</div>
+
+<div class="footer-links">
+<h3>ارتباط با ما</h3>
+<ul>
+<li><a href="https://ble.ir/Arsamwar314" target="_blank" rel="noopener noreferrer">پیوی بله</a></li>
+<li><a href="https://ble.ir/Arsamwar314" target="_blank" rel="noopener noreferrer">@Arsamwar314</a></li>
+</ul>
+</div>
+
+</div>
+
+<div class="copyright">
+تمامی حقوق برای مدیریار محفوظ است.
+</div>
+</div>
+</footer>
+
+<div class="lock-detail" id="lockDetail">
+<div class="detail-box">
+<button class="detail-close" id="detailClose">×</button>
+<div class="detail-heading">
+<div class="lock-icon" id="detailIcon">🔒</div>
+<h2 id="detailTitle">عنوان قفل</h2>
+</div>
+<div class="detail-description" id="detailDescription"></div>
+</div>
+</div>
+
+<script>
+
+/* MENU */
+const menuBtn=document.getElementById("menuBtn");
+const navLinks=document.getElementById("navLinks");
+
+menuBtn.addEventListener("click",()=>{
+navLinks.classList.toggle("active");
+});
+
+document.querySelectorAll(".nav-links a").forEach(link=>{
+link.addEventListener("click",()=>{
+navLinks.classList.remove("active");
+});
+});
+
+/* THEME */
+const themeBtn=document.getElementById("themeBtn");
+
+if(localStorage.getItem("modiryar-theme")==="light"){
+document.body.classList.add("light");
+themeBtn.textContent="☾";
+}
+
+themeBtn.addEventListener("click",()=>{
+document.body.classList.toggle("light");
+const light=document.body.classList.contains("light");
+themeBtn.textContent=light?"☾":"☀";
+localStorage.setItem("modiryar-theme",light?"light":"dark");
+});
+
+/* SHOW FEATURES */
+const showFeatures=document.getElementById("showFeatures");
+const lockEntry=document.getElementById("lockEntry");
+const locksArea=document.getElementById("locksArea");
+
+showFeatures.addEventListener("click",()=>{
+lockEntry.style.display="inline-block";
+document.getElementById("features").scrollIntoView({behavior:"smooth"});
+});
+
+lockEntry.addEventListener("click",()=>{
+locksArea.classList.add("show");
+lockEntry.textContent="🔒 قفل‌های مدیریار";
+setTimeout(()=>{
+locksArea.scrollIntoView({behavior:"smooth",block:"start"});
+},100);
+});
+
+/* LOCK DATA */
+const locks=[
+
+["🔗","لینک","سیستم محافظت گروه در برابر لینک",`
+با فعال کردن این قفل، پیام‌های حاوی لینک از کاربران بدون مقام حذف می‌شوند.
+
+دستورات فارسی:
+ضدلینک فعال
+قفل لینک
+ضدلینک غیرفعال
+بازکردن لینک
+
+دستورات انگلیسی:
+/active_anti
+/lock_link
+/disable_anti
+/unlock_link
+`],
+
+["📨","فوروارد","محافظت گروه در برابر پیام‌های فورواردی",`
+با روشن کردن این قابلیت، پیام‌های فورواردی اعضای عادی شناسایی و حذف می‌شوند.
+
+دستورات فارسی:
+ضدفوروارد فعال
+قفل فوروارد
+ضدفوروارد غیرفعال
+بازکردن فوروارد
+
+دستورات انگلیسی:
+/active_forward
+/lock_forward
+/disable_forward
+/unlock_forward
+`],
+
+["🖼️","عکس","مدیریت ارسال تصاویر در گروه",`
+با فعال‌سازی این قابلیت، تصاویر ارسال‌شده توسط اعضای عادی حذف می‌شوند.
+
+دستورات فارسی:
+قفل عکس
+بازکردن عکس
+
+دستورات انگلیسی:
+/lock_photo
+/unlock_photo
+`],
+
+["🎭","استیکر","سیستم کنترل استیکر در گروه",`
+با فعال‌سازی این قابلیت، استیکرهای ارسال‌شده توسط اعضای عادی حذف می‌شوند.
+
+دستورات فارسی:
+قفل استیکر
+بازکردن استیکر
+
+دستورات انگلیسی:
+/lock_sticker
+/unlock_sticker
+`],
+
+["🎬","فیلم","سیستم مدیریت ارسال ویدیو",`
+با روشن کردن این گزینه، ویدیوهای ارسالی اعضای عادی حذف می‌شوند.
+
+دستورات فارسی:
+قفل فیلم
+بازکردن فیلم
+
+دستورات انگلیسی:
+/lock_video
+/unlock_video
+`],
+
+["🎞️","گیف","سیستم کنترل گیف در گروه",`
+با فعال‌سازی این قابلیت، گیف‌های ارسال‌شده توسط اعضای عادی حذف می‌شوند.
+
+دستورات فارسی:
+قفل گیف
+بازکردن گیف
+
+دستورات انگلیسی:
+/lock_gif
+/unlock_gif
+`],
+
+["🌐","انگلیسی","شناسایی و محدودسازی کلمات انگلیسی",`
+با فعال کردن این قابلیت، پیام‌های دارای کلمات انگلیسی بررسی و حذف خواهند شد.
+
+دستورات فارسی:
+قفل انگلیسی
+بازکردن انگلیسی
+
+دستورات انگلیسی:
+/lock_en
+/unlock_en
+`],
+
+["🇮🇷","فارسی","شناسایی و محدودسازی کلمات فارسی",`
+با روشن کردن این گزینه، پیام‌های دارای کلمات فارسی بررسی و حذف می‌شوند.
+
+دستورات فارسی:
+قفل فارسی
+بازکردن فارسی
+
+دستورات انگلیسی:
+/lock_fa
+/unlock_fa
+`],
+
+["🤖","کامند","سیستم کنترل دستورات ربات در گروه",`
+با فعال‌سازی این قابلیت، پیام‌های دارای دستورات ربات از اعضای عادی حذف می‌شوند.
+
+دستورات فارسی:
+قفل کامند
+بازکردن کامند
+
+دستورات انگلیسی:
+/lock_command
+/unlock_command
+`],
+
+["📱","مخاطب","شناسایی و فیلتر شماره تلفن",`
+با فعال‌سازی این قابلیت، پیام‌های دارای اطلاعات تماس از اعضای عادی حذف می‌شوند.
+
+دستورات فارسی:
+قفل مخاطب
+بازکردن مخاطب
+
+دستورات انگلیسی:
+/lock_contact
+/unlock_contact
+`],
+
+["📍","مکان","مدیریت ارسال لوکیشن در گروه",`
+با فعال‌سازی این قابلیت، موقعیت‌های مکانی ارسال‌شده توسط اعضای عادی حذف می‌شوند.
+
+دستورات فارسی:
+قفل مکان
+بازکردن مکان
+
+دستورات انگلیسی:
+/lock_location
+/unlock_location
+`],
+
+["↩️","ریپلای","کنترل پیام‌های پاسخ‌دار",`
+با فعال کردن این قابلیت، پیام‌هایی که اعضای عادی در قالب پاسخ ارسال می‌کنند حذف خواهند شد.
+
+دستورات فارسی:
+قفل ریپلای
+بازکردن ریپلای
+
+دستورات انگلیسی:
+/lock_reply
+/unlock_reply
+`],
+
+["⚙️","دستورات عمومی","مدیریت دسترسی به فرمان‌های ربات",`
+با فعال کردن این قابلیت، اعضای عادی اجازه استفاده از دستورات سرگرمی و خدماتی ربات را نخواهند داشت.
+
+دستورات فارسی:
+قفل دستورات
+بازکردن دستورات
+
+دستورات انگلیسی:
+/lock_cmd
+/unlock_cmd
+`],
+
+["#️⃣","هشتگ","شناسایی و محدودسازی هشتگ",`
+با فعال‌سازی این قابلیت، پیام‌های دارای هشتگ از اعضای عادی حذف می‌شوند.
+
+دستورات فارسی:
+قفل هشتگ
+بازکردن هشتگ
+
+دستورات انگلیسی:
+/lock_hashtag
+/unlock_hashtag
+`],
+
+["🛡️","فحش","تشخیص و حذف کلمات نامناسب",`
+با فعال‌سازی این قابلیت، پیام‌های دارای الفاظ توهین‌آمیز حذف خواهند شد.
+
+دستورات فارسی:
+ضدفحش فعال
+قفل فحش
+ضدفحش غیرفعال
+بازکردن فحش
+
+دستورات انگلیسی:
+/active_badword
+/lock_badword
+/disable_badword
+/unlock_badword
+`],
+
+["📁","فایل","کنترل و محدودسازی فایل‌ها",`
+با فعال‌سازی این قابلیت، فایل‌های ارسال‌شده توسط اعضای عادی حذف می‌شوند.
+
+دستورات فارسی:
+قفل فایل
+بازکردن فایل
+
+دستورات انگلیسی:
+/lock_file
+/unlock_file
+`],
+
+["🤖","ربات","محافظت گروه در برابر ربات‌های ناشناس",`
+با فعال‌سازی این قابلیت، ورود ربات‌های جدید به گروه کنترل می‌شود.
+
+دستورات فارسی:
+قفل ربات
+بازکردن ربات
+
+دستورات انگلیسی:
+/lock_robot
+/unlock_robot
+`],
+
+["📊","نظرسنجی","کنترل نظرسنجی در گروه",`
+با فعال‌سازی این قابلیت، نظرسنجی‌های ایجادشده توسط اعضای عادی حذف می‌شوند.
+
+دستورات فارسی:
+قفل نظرسنجی
+بازکردن نظرسنجی
+
+دستورات انگلیسی:
+/lock_poll
+/unlock_poll
+`],
+
+["⚙️","قفل پیشرفته","نمایش وضعیت قفل‌های گروه",`
+با استفاده از این قابلیت، فهرست قفل‌های فعال و غیرفعال گروه را مشاهده کنید.
+
+دستورات فارسی:
+لیست قفل
+وضعیت قفل
+
+دستور انگلیسی:
+/lock_list
+`]
+
+];
+
+/* CREATE LOCK CARDS */
+const locksGrid=document.getElementById("locksGrid");
+
+locks.forEach((lock,index)=>{
+const card=document.createElement("div");
+card.className="lock-card";
+
+card.innerHTML=`
+<div class="lock-card-top">
+<div class="lock-icon">${lock[0]}</div>
+<h3>${lock[1]}</h3>
+</div>
+<p>${lock[2]}</p>
+<span class="more">مشاهده توضیحات و دستورات ←</span>
+`;
+
+card.addEventListener("click",()=>{
+openLock(index);
+});
+
+locksGrid.appendChild(card);
+});
+
+/* LOCK DETAILS */
+const lockDetail=document.getElementById("lockDetail");
+const detailIcon=document.getElementById("detailIcon");
+const detailTitle=document.getElementById("detailTitle");
+const detailDescription=document.getElementById("detailDescription");
+
+function openLock(index){
+const lock=locks[index];
+detailIcon.textContent=lock[0];
+detailTitle.textContent=lock[1];
+detailDescription.textContent=lock[3];
+lockDetail.classList.add("show");
+document.body.style.overflow="hidden";
+}
+
+function closeLock(){
+lockDetail.classList.remove("show");
+document.body.style.overflow="";
+}
+
+document.getElementById("detailClose").addEventListener("click",closeLock);
+
+lockDetail.addEventListener("click",(e)=>{
+if(e.target===lockDetail){
+closeLock();
+}
+});
+
+document.addEventListener("keydown",(e)=>{
+if(e.key==="Escape"){
+closeLock();
+}
+});
+
+</script>
+</body>
+  </html>
